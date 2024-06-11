@@ -15,7 +15,7 @@
     color: #084276;
   }
   h1 {
-    margin: 40px 0 40px 200px;
+    margin: 40px 0 40px 50px;
   }
   .detail h1 {
     font-family: 'Courier New', monospace;
@@ -115,7 +115,7 @@
     flex-wrap: wrap;
     flex-direction: column;
     margin-top: 10px;
-    max-width: 550px;
+    max-width: 200px;
   }
   input, textarea, form button {
     margin-bottom: 10px;
@@ -201,7 +201,7 @@
     padding: 10px;
     margin-top: 15px;
     margin-bottom: 0;
-    max-width: 540px;
+    max-width: 200px;
   }
   .search-input:focus-visible {
     outline: none;
@@ -276,5 +276,13 @@
     #chords {
       margin-top: 10px;
     }
+
+    .form-box form {
+        max-width: 550px;
+      }
+
+      .search-input {
+        max-width: 540px;
+      }
   }
   
