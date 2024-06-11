@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const songList = document.getElementById('songList');
+    let allSongs = [];
 
     const fetchSongs = () => {
         fetch('./php/get_songs.php')
@@ -6,10 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(data => {
                 allSongs = data;
                 displaySongs(allSongs);
-               
-                })
-                .catch(error => console.error('Error fetching songs:', error));
-                
+            })
+            .catch(error => console.error('Error fetching songs:', error));
     };
 
     const displaySongs = (songs) => {
@@ -30,19 +30,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     <a href="detail.php?id=${song.id}" target="_blank"><button class="btn-add">Mehr anzeigen</button></a>
                 </div>
             `;
-           
             songList.innerHTML += songContent;
-           
         });
     };
-
 
     const formatChordsInText = (text) => {
         return text.replace(/\[([A-G][#b]?(maj|min|m|sus|dim|aug)?[0-9]*)\]/g, '<span class="chord">$1</span>');
     };
 
-
     fetchSongs();
-
-
 });
