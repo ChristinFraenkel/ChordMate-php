@@ -1,9 +1,181 @@
-/* first Styles */
-body {
+/* General Reset and Transition */
+* {
+    margin: 0;
+    padding: 0;
+    transition: all 0.3s ease;
+  }
+  
+  body {
     background: #D3E4F4;
-}
-h1 {
+  }
+  
+  /* Headers */
+  h1, h2, h3 {
     font-family: Verdana, sans-serif;
     color: #084276;
+  }
+  h1 {
     margin: 40px 0 40px 200px;
-}
+  }
+
+  h2{
+  color: #000;
+  }
+  
+  h3 {
+    font-family: 'Courier New', monospace;
+    color: #000;
+  }
+  
+  /* Song Cards */
+  .song-card {
+    padding: 20px;
+    font-family: 'Courier New', monospace;
+  }
+  
+  /* Output Boxes */
+  .output-box, #songList {
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .output-content {
+    border: 2px solid #084276;
+    border-radius: 15px;
+    padding: 10px 10px 70px;
+    margin: 15px;
+    position: relative;
+  }
+  .output-content.detail {
+    border: unset;
+  }
+  .output-content.detail .btn-back.top, 
+  .output-content.detail .editButton.top {
+    position: absolute;
+    left: 10px;
+  }
+
+  .artist-paragraph {
+    text-decoration: underline;
+    margin: 5px 0 15px;
+  }
+
+  /* Buttons */
+  button {
+    border-radius: 15px;
+    min-height: 25px;
+    width: 110px;
+    background-color: #e8e8e8;
+    padding: 5px;
+    margin: 15px auto auto;
+    font-family: 'Courier New', monospace;
+  }
+  a button {
+    color: #000;
+    text-decoration: none;
+  }
+  button:hover {
+    cursor: url(../assets/metalhand.cur), pointer;
+    background-color: #D0D0D7;
+    color: #000;
+  }
+  
+  .title-btn-box {
+    display: flex;
+  }
+  .title-btn-box button {
+    margin-top: auto;
+  }
+  .title-btn-box a {
+    position: absolute;
+    right: 20px;
+  }
+  
+  /* Form Styles */
+  .input-box {
+    margin: 0 0 50px 30px;
+  }
+  .form-box form {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    margin-top: 10px;
+    max-width: 550px;
+  }
+  input, textarea, form button {
+    margin-bottom: 10px;
+    border-radius: 15px;
+    min-height: 25px;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    padding: 10px;
+    width: 100%;
+  }
+  textarea {
+    padding-top: 5px;
+    white-space: pre-wrap;
+  }
+  input::placeholder, textarea::placeholder {
+    color: #565656;
+  }
+  input:focus-visible, textarea:focus-visible {
+    outline: none;
+    background: #084276;
+    color: #fff;
+  }
+  input:focus-visible::placeholder, textarea:focus-visible::placeholder {
+    color: #fff;
+    font-weight: bold;
+  }
+  form button {
+    width: 110px;
+    margin: auto;
+  }
+  
+  /* Search Input */
+  .search-input {
+    font-family: 'Courier New', monospace;
+    padding: 10px;
+    margin-top: 15px;
+    margin-bottom: 0;
+    max-width: 540px;
+  }
+  .search-input:focus-visible {
+    outline: none;
+    background: #084276;
+    color: #fff;
+  }
+  .search-input:focus-visible::placeholder {
+    color: #fff;
+    font-weight: bold;
+  }
+  
+  /* Icons */
+  .garbageIcon {
+    position: absolute;
+    right: 10px;
+  }
+  .garbageIcon:hover {
+    cursor: url(../assets/metalhand.cur), pointer;
+  }
+  .garbageIcon button {
+    border: unset;
+    min-height: unset;
+    width: unset;
+    margin: unset;
+    padding: unset;
+    background-color: unset;
+  }
+  .garbageIcon button:hover {
+    background-color: unset;
+  }
+
+  /* Chords */
+.chord {
+    font-weight: bold;
+    color: #0C72BA;
+    background-color: #CCCCCC;
+    padding: 2px 4px;
+    margin: 5px 0;
+    display: inline-block;
+  }
