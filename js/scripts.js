@@ -1,9 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const songForm = document.getElementById('songForm');
     const songList = document.getElementById('songList');
-    const chordFilterDiv = document.getElementById('chordFilter');
     const filterInput = document.getElementById('filter');
+    const chordFilterDiv = document.getElementById('chordFilter');
+
     let allSongs = [];
     let chordFilter = [];
+    let allChords = [];
 
     const fetchSongs = () => {
         fetch('./php/get_songs.php')
@@ -11,20 +14,35 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(data => {
                 allSongs = data;
                 displaySongs(allSongs);
-                const allChords = extractAllUniqueChords(allSongs);
+                allChords = extractAllUniqueChords(allSongs);
                 populateChordFilter(allChords);
             })
             .catch(error => console.error('Error fetching songs:', error));
     };
 
-    const deleteSong = (id) => {
-        fetch(`./php/delete_song.php?id=${id}`, { method: 'DELETE' })
-            .then(response => response.json())
-            .then(() => {
-                allSongs = allSongs.filter(song => song.id !== id);
-                filterSongs();
-            })
-            .catch(error => console.error('Error deleting song:', error));
+    const displaySongs = (songs) => {
+        if (!songList) return;
+        songList.innerHTML = '';
+        songs.forEach(song => {
+            const firstEightLines = song.text.split('\n').slice(0, 8).join('\n');
+            const formattedText = formatChordsInText(firstEightLines);
+
+            const songContent = `
+                <div class="output-content">
+                    <div class="garbageIcon">
+                        <button class="delete-btn">❌</button>
+                    </div>
+                    <h3>${song.title}</h3>
+                    <p class="artist-paragraph">${song.artist}</p>
+                    <pre>${formattedText}...</pre>
+                    <a href="detail.php?id=${song.id}" target="_blank"><button class="btn-add">Mehr anzeigen</button></a>
+                </div>
+            `;
+            songList.innerHTML += songContent;
+
+            const deleteBtn = songList.querySelector('.output-content:last-child .delete-btn');
+            deleteBtn.addEventListener('click', () => deleteSong(song.id));
+        });
     };
 
     const filterSongs = () => {
@@ -55,8 +73,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const populateChordFilter = (chords) => {
         if (!chordFilterDiv) return;
+        const currentChordFilter = new Set(chordFilter);
         chordFilterDiv.innerHTML = '';
         chords.sort();
+
         chords.forEach(chord => {
             const div = document.createElement('div');
             div.classList.add('chord-check-box');
@@ -65,6 +85,9 @@ document.addEventListener('DOMContentLoaded', () => {
             input.classList.add('chord-check');
             input.type = 'checkbox';
             input.value = chord;
+            if (currentChordFilter.has(chord)) {
+                input.checked = true;
+            }
             input.addEventListener('change', () => {
                 if (input.checked) {
                     chordFilter.push(chord);
@@ -95,33 +118,18 @@ document.addEventListener('DOMContentLoaded', () => {
         return chords;
     };
 
-    const displaySongs = (songs) => {
-        if (!songList) return;
-        songList.innerHTML = '';
-        songs.forEach(song => {
-            const firstEightLines = song.text.split('\n').slice(0, 8).join('\n');
-            const formattedText = formatChordsInText(firstEightLines);
-
-            const songContent = `
-                <div class="output-content">
-                    <div class="garbageIcon">
-                        <button class="delete-btn">❌</button>
-                    </div>
-                    <h3>${song.title}</h3>
-                    <p class="artist-paragraph">${song.artist}</p>
-                    <pre>${formattedText}...</pre>
-                    <a href="detail.php?id=${song.id}" target="_blank"><button class="btn-add">Mehr anzeigen</button></a>
-                </div>
-            `;
-            songList.innerHTML += songContent;
-
-            const deleteBtn = songList.querySelector('.output-content:last-child .delete-btn');
-            deleteBtn.addEventListener('click', () => deleteSong(song.id));
-        });
-    };
-
     const formatChordsInText = (text) => {
         return text.replace(/\[([A-G][#b]?(maj|min|m|sus|dim|aug)?[0-9]*)\]/g, '<span class="chord">$1</span>');
+    };
+
+    const deleteSong = (id) => {
+        fetch(`./php/delete_song.php?id=${id}`, { method: 'DELETE' })
+            .then(response => response.json())
+            .then(() => {
+                allSongs = allSongs.filter(song => song.id !== id);
+                filterSongs();
+            })
+            .catch(error => console.error('Error deleting song:', error));
     };
 
     if (songForm) {
@@ -151,6 +159,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
         fetchSongs();
     }
-
-    fetchSongs();
 });
