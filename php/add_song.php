@@ -9,7 +9,7 @@ $artist = $data['artist'];
 $title = $data['title'];
 $text = $data['text'];
 
-$stmt = $pdo->prepare('INSERT INTO songs (id, artist, title, text) VALUES (?, ?, ?, ? )');
+$stmt = $pdo->prepare('INSERT INTO songs (id, artist, title, text) VALUES (?, ?, ?, ?)');
 $stmt->execute([$id, $artist, $title, $text]);
 
 echo json_encode(['id' => $id, 'artist' => $artist, 'title' => $title, 'text' => $text]);

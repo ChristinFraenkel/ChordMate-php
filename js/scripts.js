@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const saveSongDetail = (id, title, artist, text) => {
-        fetch('./php/update_song.php', {
+        fetch('update_song.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
