@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const songList = document.getElementById('songList');
+    const filterInput = document.getElementById('filter');
     let allSongs = [];
 
     const fetchSongs = () => {
@@ -11,6 +12,19 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(error => console.error('Error fetching songs:', error));
     };
+
+    const filterSongs = () => {
+        const filter = filterInput.value.toLowerCase();
+        const filtered = allSongs.filter(song => {
+            const isTitleMatch = song.title.toLowerCase().includes(filter);
+            const isArtistMatch = song.artist.toLowerCase().includes(filter);
+            const isSongtextMatch = song.text.toLowerCase().includes(filter);
+            return isTitleMatch || isArtistMatch || isSongtextMatch;
+        });
+        displaySongs(filtered);
+    };
+
+    filterInput.addEventListener('input', filterSongs);
 
     const displaySongs = (songs) => {
         if (!songList) return;
