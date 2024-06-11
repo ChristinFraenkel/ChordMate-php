@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const songList = document.getElementById('songList');
     const filterInput = document.getElementById('filter');
     const chordFilterDiv = document.getElementById('chordFilter');
+    const songDetail = document.getElementById('songDetail');
 
     let allSongs = [];
     let chordFilter = [];
@@ -35,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h3>${song.title}</h3>
                     <p class="artist-paragraph">${song.artist}</p>
                     <pre>${formattedText}...</pre>
-                    <a href="detail.php?id=${song.id}" target="_blank"><button class="btn-add">Mehr anzeigen</button></a>
+                    <a href="./php/detail.php?id=${song.id}" target="_blank"><button class="btn-add">Mehr anzeigen</button></a>
                 </div>
             `;
             songList.innerHTML += songContent;
@@ -43,6 +44,159 @@ document.addEventListener('DOMContentLoaded', () => {
             const deleteBtn = songList.querySelector('.output-content:last-child .delete-btn');
             deleteBtn.addEventListener('click', () => deleteSong(song.id));
         });
+    };
+
+    const displaySongDetail = (song) => {
+        if (song.error) {
+            songDetail.innerHTML = `<p>${song.error}</p>`;
+            return;
+        }
+
+        const formattedText = formatChordsInText(song.text);
+
+        const songContent = `
+            <div class="output-content detail">
+                <a href="../"><button class="btn-back top">🔙</button></a>
+                <button class="editButton top">🛠</button>
+                <div id="columnButtons" class="hidden-content">
+                    <button id="oneColumnButton">1 Spalte</button>
+                    <button id="twoColumnsButton">2 Spalten</button>
+                    <button id="threeColumnsButton">3 Spalten</button>
+                </div>
+                <h1 id="songTitle">${song.title}</h1>
+                <p id="songArtist" class="artist-paragraph">${song.artist}</p>
+                <pre id="songText">${formattedText}</pre>
+                <div id="editForm" class="hidden-content">
+                    <input type="text" id="editTitle" value="${song.title}" />
+                    <input type="text" id="editArtist" value="${song.artist}" />
+                    <textarea id="editText" rows="30">${song.text}</textarea>
+                    <button id="saveButton">💾</button>
+                    <button id="cancelButton">❎</button>
+                </div>
+                <button class="editButton bottom">🛠</button>
+                <a href="../"><button id="backButton" class="btn-back bottom">🔙</button></a>
+            </div>
+        `;
+        songDetail.innerHTML = songContent;
+
+        initializeDetailPage(song);
+    };
+
+    const initializeDetailPage = (song) => {
+        const editButtons = document.querySelectorAll('.editButton');
+        const editForm = document.getElementById('editForm');
+        const editTitle = document.getElementById('editTitle');
+        const editArtist = document.getElementById('editArtist');
+        const editText = document.getElementById('editText');
+        const saveButton = document.getElementById('saveButton');
+        const cancelButton = document.getElementById('cancelButton');
+        const columnButtons = document.getElementById('columnButtons');
+        const oneColumnButton = document.getElementById('oneColumnButton');
+        const twoColumnsButton = document.getElementById('twoColumnsButton');
+        const threeColumnsButton = document.getElementById('threeColumnsButton');
+        const songText = document.getElementById('songText');
+
+        updateColumnButtonsVisibility();
+
+        window.addEventListener('resize', updateColumnButtonsVisibility);
+
+        editButtons.forEach(editButton => {
+            editButton.addEventListener('click', () => {
+                toggleEditFormVisibility(true, editButtons);
+            });
+        });
+
+        cancelButton.addEventListener('click', () => {
+            displaySongDetail(song);
+        });
+
+        saveButton.addEventListener('click', () => {
+            const updatedTitle = editTitle.value;
+            const updatedArtist = editArtist.value;
+            const updatedText = editText.value;
+            saveSongDetail(song.id, updatedTitle, updatedArtist, updatedText);
+        });
+
+        oneColumnButton.addEventListener('click', () => {
+            setColumnCount(songText, 1, oneColumnButton, twoColumnsButton, threeColumnsButton);
+        });
+
+        twoColumnsButton.addEventListener('click', () => {
+            setColumnCount(songText, 2, twoColumnsButton, oneColumnButton, threeColumnsButton);
+        });
+
+        threeColumnsButton.addEventListener('click', () => {
+            setColumnCount(songText, 3, threeColumnsButton, oneColumnButton, twoColumnsButton);
+        });
+    };
+
+    const toggleEditFormVisibility = (show, editButtons) => {
+        document.getElementById('songTitle').classList.toggle('hidden-content', show);
+        document.getElementById('songArtist').classList.toggle('hidden-content', show);
+        document.getElementById('songText').classList.toggle('hidden-content', show);
+        document.getElementById('backButton').classList.toggle('hidden-content', show);
+        columnButtons.classList.toggle('hidden-content', show);
+        editButtons.forEach(button => button.classList.toggle('hidden-content', show));
+        document.getElementById('editForm').classList.toggle('hidden-content', !show);
+    };
+
+    const updateColumnButtonsVisibility = () => {
+        const viewportWidth = window.innerWidth;
+        if (viewportWidth >= 1600) {
+            columnButtons.classList.remove('hidden-content');
+            oneColumnButton.classList.add('hidden-content');
+            twoColumnsButton.classList.remove('hidden-content');
+            threeColumnsButton.classList.remove('hidden-content');
+        } else if (viewportWidth >= 1200) {
+            columnButtons.classList.remove('hidden-content');
+            oneColumnButton.classList.add('hidden-content');
+            twoColumnsButton.classList.remove('hidden-content');
+            threeColumnsButton.classList.add('hidden-content');
+        } else {
+            columnButtons.classList.add('hidden-content');
+        }
+    };
+
+    const setColumnCount = (element, count, hideButton, ...showButtons) => {
+        element.style.columnCount = count;
+        element.style.columnRule = count === 1 ? "unset" : "dotted";
+        hideButton.classList.add('hidden-content');
+        showButtons.forEach(button => button.classList.remove('hidden-content'));
+    };
+
+    const saveSongDetail = (id, title, artist, text) => {
+        fetch('./php/update_song.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id, title, artist, text })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                const updatedSong = { id, title, artist, text };
+                displaySongDetail(updatedSong);
+            } else {
+                console.error('Error updating song:', data.error);
+            }
+        })
+        .catch(error => console.error('Error updating song:', error));
+    };
+
+    const deleteSong = (id) => {
+        fetch(`./php/delete_song.php?id=${id}`, { method: 'DELETE' })
+            .then(response => response.json())
+            .then(() => {
+                allSongs = allSongs.filter(song => song.id !== id);
+                filterSongs();
+            })
+            .catch(error => console.error('Error deleting song:', error));
     };
 
     const filterSongs = () => {
@@ -122,16 +276,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return text.replace(/\[([A-G][#b]?(maj|min|m|sus|dim|aug)?[0-9]*)\]/g, '<span class="chord">$1</span>');
     };
 
-    const deleteSong = (id) => {
-        fetch(`./php/delete_song.php?id=${id}`, { method: 'DELETE' })
-            .then(response => response.json())
-            .then(() => {
-                allSongs = allSongs.filter(song => song.id !== id);
-                filterSongs();
-            })
-            .catch(error => console.error('Error deleting song:', error));
-    };
-
     if (songForm) {
         songForm.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -158,5 +302,9 @@ document.addEventListener('DOMContentLoaded', () => {
         filterInput.addEventListener('input', filterSongs);
 
         fetchSongs();
+    }
+
+    if (songData) {
+        displaySongDetail(songData);
     }
 });

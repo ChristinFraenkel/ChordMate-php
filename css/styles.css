@@ -17,7 +17,11 @@
   h1 {
     margin: 40px 0 40px 200px;
   }
-
+  .detail h1 {
+    font-family: 'Courier New', monospace;
+    color: #000;
+    margin: 140px 0 0 0;
+  }
   h2{
   color: #000;
   }
@@ -54,12 +58,20 @@
     position: absolute;
     left: 10px;
   }
-
+  .output-content.detail .btn-back.top {
+    top: -20px;
+  }
+  .output-content.detail .editButton.top {
+    top: 30px;
+  }
   .artist-paragraph {
     text-decoration: underline;
     margin: 5px 0 15px;
   }
-
+  .detail .artist-paragraph {
+    margin: 5px 0 35px;
+  }
+  
   /* Buttons */
   button {
     border-radius: 15px;
@@ -75,11 +87,14 @@
     text-decoration: none;
   }
   button:hover {
-    cursor: url(../assets/metalhand.cur), pointer;
+    cursor: url(assets/metalhand.cur), pointer;
     background-color: #D0D0D7;
     color: #000;
   }
-  
+  .btn-add {
+    position: absolute;
+    bottom: 10px;
+  }
   .title-btn-box {
     display: flex;
   }
@@ -132,6 +147,54 @@
     margin: auto;
   }
   
+  /* Detail Page */
+  .song-content, .song-content h2 {
+    font-family: 'Courier New', monospace;
+  }
+  .song-content {
+    padding: 20px;
+  }
+  
+  /* Chords */
+  .chord {
+    font-weight: bold;
+    color: #0C72BA;
+    background-color: #CCCCCC;
+    padding: 2px 4px;
+    margin: 5px 0;
+    display: inline-block;
+  }
+  
+  /* Chord Filter */
+  .chord-filter {
+    display: flex;
+  }
+  .chord-filter .chord-check-box {
+    flex-direction: column;
+    display: flex;
+  }
+  .chord-filter .chord-check-box .chord-check:hover {
+    cursor: url(assets/metalhand.cur), pointer;
+  }
+  .filter-box {
+    margin: 25px 0;
+  }
+  
+  /* Checkbox Styles */
+  input[type="checkbox"] {
+    appearance: none;
+    background-size: cover;
+    width: 27px;
+    height: 27px;
+    border: 2px solid #084276;
+    border-radius: 2px;
+    margin: 0 10px 0 0;
+    padding: 0;
+  }
+  input[type="checkbox"]:checked {
+    background-image: url('assets/e-guitar-512x512.png');
+  }
+  
   /* Search Input */
   .search-input {
     font-family: 'Courier New', monospace;
@@ -156,7 +219,7 @@
     right: 10px;
   }
   .garbageIcon:hover {
-    cursor: url(../assets/metalhand.cur), pointer;
+    cursor: url(assets/metalhand.cur), pointer;
   }
   .garbageIcon button {
     border: unset;
@@ -169,43 +232,49 @@
   .garbageIcon button:hover {
     background-color: unset;
   }
-
-  /* Chords */
-.chord {
-    font-weight: bold;
-    color: #0C72BA;
-    background-color: #CCCCCC;
-    padding: 2px 4px;
-    margin: 5px 0;
-    display: inline-block;
+  
+  /* Edit Button */
+  .edit-btn {
+    position: absolute;
+    right: 20px;
+    top: 45px;
   }
-
-  /* Chord Filter */
-.chord-filter {
+  .edit-input-box {
     display: flex;
-  }
-  .chord-filter .chord-check-box {
     flex-direction: column;
-    display: flex;
   }
-  .chord-filter .chord-check-box .chord-check:hover {
-    cursor: url(../assets/metalhand.cur), pointer;
-  }
-  .filter-box {
-    margin: 25px 0;
+  .edit-input-box button {
+    margin-left: 0;
   }
   
-  /* Checkbox Styles */
-  input[type="checkbox"] {
-    appearance: none;
-    background-size: cover;
-    width: 27px;
-    height: 27px;
-    border: 2px solid #084276;
-    border-radius: 2px;
-    margin: 0 10px 0 0;
-    padding: 0;
+  /* Hidden Elements */
+  .hidden {
+    visibility: hidden;
   }
-  input[type="checkbox"]:checked {
-    background-image: url('../assets/e-guitar-512x512.png');
+  .hidden-content {
+    display: none;
   }
+
+  
+  #editForm {
+    margin-top: 30px;
+  }
+  #columnButtons {
+    position: absolute;
+    top: 80px;
+  }
+  
+  /* Responsive Styles */
+  @media (min-width: 1000px) {
+    .input-box {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .filter-box {
+      margin: 0 0 0 50px;
+    }
+    #chords {
+      margin-top: 10px;
+    }
+  }
+  
