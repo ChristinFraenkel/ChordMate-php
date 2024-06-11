@@ -87,7 +87,7 @@
     text-decoration: none;
   }
   button:hover {
-    cursor: url(assets/metalhand.cur), pointer;
+    cursor: url(../assets/metalhand.cur), pointer;
     background-color: #D0D0D7;
     color: #000;
   }
@@ -174,7 +174,7 @@
     display: flex;
   }
   .chord-filter .chord-check-box .chord-check:hover {
-    cursor: url(assets/metalhand.cur), pointer;
+    cursor: url(../assets/metalhand.cur), pointer;
   }
   .filter-box {
     margin: 25px 0;
@@ -192,7 +192,7 @@
     padding: 0;
   }
   input[type="checkbox"]:checked {
-    background-image: url('assets/e-guitar-512x512.png');
+    background-image: url('../assets/e-guitar-512x512.png');
   }
   
   /* Search Input */
@@ -219,7 +219,7 @@
     right: 10px;
   }
   .garbageIcon:hover {
-    cursor: url(assets/metalhand.cur), pointer;
+    cursor: url(../assets/metalhand.cur), pointer;
   }
   .garbageIcon button {
     border: unset;
@@ -255,7 +255,7 @@
     display: none;
   }
 
-  
+
   #editForm {
     margin-top: 30px;
   }
