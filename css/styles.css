@@ -179,3 +179,33 @@
     margin: 5px 0;
     display: inline-block;
   }
+
+  /* Chord Filter */
+.chord-filter {
+    display: flex;
+  }
+  .chord-filter .chord-check-box {
+    flex-direction: column;
+    display: flex;
+  }
+  .chord-filter .chord-check-box .chord-check:hover {
+    cursor: url(../assets/metalhand.cur), pointer;
+  }
+  .filter-box {
+    margin: 25px 0;
+  }
+  
+  /* Checkbox Styles */
+  input[type="checkbox"] {
+    appearance: none;
+    background-size: cover;
+    width: 27px;
+    height: 27px;
+    border: 2px solid #084276;
+    border-radius: 2px;
+    margin: 0 10px 0 0;
+    padding: 0;
+  }
+  input[type="checkbox"]:checked {
+    background-image: url('../assets/e-guitar-512x512.png');
+  }
