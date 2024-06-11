@@ -17,6 +17,16 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(error => console.error('Error fetching songs:', error));
     };
 
+    const deleteSong = (id) => {
+        fetch(`./php/delete_song.php?id=${id}`, { method: 'DELETE' })
+            .then(response => response.json())
+            .then(() => {
+                allSongs = allSongs.filter(song => song.id !== id);
+                filterSongs();
+            })
+            .catch(error => console.error('Error deleting song:', error));
+    };
+
     const filterSongs = () => {
         const filter = filterInput.value.toLowerCase();
         const filtered = allSongs.filter(song => {
@@ -104,12 +114,43 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
             songList.innerHTML += songContent;
+
+            const deleteBtn = songList.querySelector('.output-content:last-child .delete-btn');
+            deleteBtn.addEventListener('click', () => deleteSong(song.id));
         });
     };
 
     const formatChordsInText = (text) => {
         return text.replace(/\[([A-G][#b]?(maj|min|m|sus|dim|aug)?[0-9]*)\]/g, '<span class="chord">$1</span>');
     };
+
+    if (songForm) {
+        songForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const artist = document.getElementById('artist').value;
+            const title = document.getElementById('title').value;
+            const text = document.getElementById('text').value;
+
+            fetch('./php/add_song.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ artist, title, text })
+            })
+            .then(response => response.json())
+            .then(data => {
+                allSongs.push(data);
+                filterSongs();
+                songForm.reset();
+            })
+            .catch(error => console.error('Error adding song:', error));
+        });
+
+        filterInput.addEventListener('input', filterSongs);
+
+        fetchSongs();
+    }
 
     fetchSongs();
 });
