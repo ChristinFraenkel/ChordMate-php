@@ -10,7 +10,32 @@
 <body>
     <div id="app">
         <h1>ChordMate</h1>
-        <!-- Inhalt -->
+        <div class="song-card">
+            <div class="input-box">
+                <div class="form-box">
+                    <h2>Song hinzufügen</h2>
+                    <form id="songForm">
+                        <input type="text" id="title" placeholder="Titel">
+                        <input type="text" id="artist" placeholder="Künstler">
+                        <textarea id="text" placeholder="Songtext: Akkorde bitte mit eckigen Klammern einfügen -> [G]" rows="10" cols="50"></textarea>
+                        <button type="submit">hinzufügen</button>
+                    </form>
+                </div>
+                <div class="filter-box">
+                    <h2>Filter</h2>
+                    <div id="chords">
+                        <div id="chordFilter" class="chord-filter"></div>
+                    </div>
+                    <input type="text" id="filter" class="search-input" placeholder="Suche nach Titel, Künstler oder Songtext">
+                </div>
+            </div>
+            <div class="output-box">
+                
+                    
+                    <div id="songList"></div>
+            </div>
+        </div>
     </div>
+    <script src="js/scripts.js"></script>
 </body>
 </html>
